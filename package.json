@@ -1,0 +1,23 @@
+{
+  "name": "forbes-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "camelcase": "^5.3.1",
+    "cross-blob": "^1.1.1",
+    "js2excel": "^1.0.1",
+    "lodash": "^4.17.15",
+    "node-json-xlsx": "^0.2.2",
+    "x-ray": "^2.3.4",
+    "xlsx": "^0.15.3"
+  }
+}
