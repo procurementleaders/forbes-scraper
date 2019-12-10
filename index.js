@@ -1,26 +1,29 @@
+const settings = {
+    LIMIT: 2000,
+    YEAR: 2019,
+    URI: "global2000"
+}
+
 const Axios = require("axios");
 const _ = require("lodash");
-const YEAR = 2019;
-const URI = "global2000";
-const API_URL = `https://www.forbes.com/ajax/list/data?year=${YEAR}&uri=${URI}&type=organization`;
-const Xray = require("x-ray");
+const API_URL = `https://www.forbes.com/ajax/list/data?year=${settings.YEAR}&uri=${settings.URI}&type=organization`;
+const scrape = require("x-ray")();
 const camelCase = require("camelcase");
-const scrape = Xray();
 const XLSX = require("xlsx");
-
-const LIMIT = 100
+const cliProgress = require("cli-progress");
 
 const createCompanyURI = company =>
-  `https://www.forbes.com/companies/${company}/?list=${URI}`;
+  `https://www.forbes.com/companies/${company}/?list=${settings.URI}`;
 
 async function main() {
   try {
     const response = await Axios.get(API_URL);
     const { data } = response;
-    const limited = _.sortBy(data, x => x.rank).slice(0, LIMIT);
+    const limited = _.sortBy(data, x => x.rank).slice(0, settings.LIMIT);
     const companyData = [];
-
-    for (const company of limited) {
+    const progress = new cliProgress.SingleBar({}, cliProgress.Presets.rect);
+    progress.start(limited.length, 0);
+    for (const [index, company] of limited.entries()) {
       const obj = await scrape(
         createCompanyURI(company.uri),
         ".profile-content",
@@ -42,7 +45,11 @@ async function main() {
 
       const json = { ...company, ...transformed };
       companyData.push(json);
+      progress.update(index);
     }
+    progress.update(limited.length);
+
+    progress.stop();
 
     const workbook = XLSX.utils.book_new();
     const sheet = XLSX.utils.json_to_sheet(companyData);
