@@ -16,7 +16,7 @@
     "cli-progress": "^3.4.0",
     "cross-blob": "^1.1.1",
     "js2excel": "^1.0.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "node-json-xlsx": "^0.2.2",
     "x-ray": "^2.3.4",
     "xlsx": "^0.15.3"
